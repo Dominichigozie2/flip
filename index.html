@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Swiper demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="img/icon-192x192.png" />
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+  </head>
+
+  <body>
+    <!-- Swiper -->
+
+    <div class="swiper mySwiper landscape">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG 1.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG2.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG3.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG4.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG5.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG6.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG7.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG8.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG9.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG10.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG 11.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG 12.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG13.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG14.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG15.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG16.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG17.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG 18.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG 19.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/PG20.jpg" alt="" />
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" title="Link to image">
+            <img src="./img/BACKCOVER.jpg" alt="" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <button id="installBtn" class="hidden">Install App</button>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        grabCursor: true,
+        effect: "creative",
+        creativeEffect: {
+          prev: {
+            shadow: true,
+            translate: [0, 0, -400],
+          },
+          next: {
+            translate: ["100%", 0, 0],
+          },
+        },
+      });
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/service-worker.js")
+            .then((registration) => {
+              console.log(
+                "Service Worker registered with scope:",
+                registration.scope
+              );
+            })
+            .catch((error) => {
+              console.log("Service Worker registration failed:", error);
+            });
+        });
+      }
+
+      let deferredPrompt;
+
+      window.addEventListener("beforeinstallprompt", (e) => {
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+
+        // Show your custom install button
+        const installButton = document.getElementById("installBtn");
+        installButton.style.display = "block";
+
+        installButton.addEventListener("click", () => {
+          // Hide the install button after clicked
+          installButton.style.display = "none";
+          // Show the install prompt
+          deferredPrompt.prompt();
+          // Wait for the user to respond to the prompt
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === "accepted") {
+              console.log("User accepted the install prompt");
+            } else {
+              console.log("User dismissed the install prompt");
+            }
+            deferredPrompt = null;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
