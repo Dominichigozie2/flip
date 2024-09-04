@@ -174,9 +174,7 @@
         // Show the install button
         document.getElementById("installBtn").style.display = "block";
 
-        document
-          .getElementById("install-button")
-          .addEventListener("click", () => {
+        document.getElementById("installBtn").addEventListener("click", () => {
             // Show the install prompt
             deferredPrompt.prompt();
             // Wait for the user to respond to the prompt
