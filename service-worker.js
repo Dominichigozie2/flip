@@ -1,33 +1,33 @@
-const CACHE_NAME = "magazine-cache-v3";
+const CACHE_NAME = "magazine-cache-v4";
 
 // Install event - cache essential assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll([
-        "/", // Updated root URL for GitHub Pages
-        "/index.html",
-        "/style.css",
-        "/img/PG 1.jpg",
-        "/img/PG2.jpg",
-        "/img/PG3.jpg",
-        "/img/PG4.jpg",
-        "/img/PG5.jpg",
-        "/img/PG6.jpg",
-        "/img/PG7.jpg",
-        "/img/PG8.jpg",
-        "/img/PG10.jpg",
-        "/img/PG 11.jpg",
-        "/img/PG 12.jpg",
-        "/img/PG13.jpg",
-        "/img/PG14.jpg",
-        "/img/PG15.jpg",
-        "/img/PG16.jpg",
-        "/img/PG17.jpg",
-        "/img/PG 18.jpg",
-        "/img/PG 19.jpg",
-        "/img/PG20.jpg",
-        "/img/BACKCOVER.jpg"
+        "/flip/", // Updated root URL for GitHub Pages
+        "/flip/index.html",
+        "/flip/style.css",
+        "/flip/img/PG 1.jpg",
+        "/flip/img/PG2.jpg",
+        "/flip/img/PG3.jpg",
+        "/flip/img/PG4.jpg",
+        "/flip/img/PG5.jpg",
+        "/flip/img/PG6.jpg",
+        "/flip/img/PG7.jpg",
+        "/flip/img/PG8.jpg",
+        "/flip/img/PG10.jpg",
+        "/flip/img/PG 11.jpg",
+        "/flip/img/PG 12.jpg",
+        "/flip/img/PG13.jpg",
+        "/flip/img/PG14.jpg",
+        "/flip/img/PG15.jpg",
+        "/flip/img/PG16.jpg",
+        "/flip/img/PG17.jpg",
+        "/flip/img/PG 18.jpg",
+        "/flip/img/PG 19.jpg",
+        "/flip/img/PG20.jpg",
+        "/flip/img/BACKCOVER.jpg"
       ]).catch((error) => {
         console.error('Failed to cache assets:', error);
       });
