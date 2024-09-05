@@ -1,4 +1,4 @@
-const CACHE_NAME = "magazine-cache-v2";
+const CACHE_NAME = "magazine-cache-v3";
 
 // Install event - cache essential assets
 self.addEventListener('install', (event) => {
