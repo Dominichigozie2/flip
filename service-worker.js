@@ -1,4 +1,4 @@
-const cacheName = 'slider-v1';
+const cacheName = 'slider-v2';
 const basePath = '/flip';
 
 const filesToCache = [
