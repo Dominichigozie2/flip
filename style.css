@@ -25,7 +25,7 @@ body {
 
 .swiper-slide {
   display: flex;
-
+  width: 100%;
   align-items: center;
   justify-content: center;
   font-size: 22px;
@@ -69,6 +69,5 @@ button{
 @media(width < 600px){
   .swiper{
     width: 95%;
-    /* height: 500px; */
   }
 }
