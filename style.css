@@ -1,73 +1,450 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
 *{
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 html,
 body {
   position: relative;
+  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
 }
 
 body {
-  background: rgb(14,7,60);background: linear-gradient(0deg, rgba(14,7,60,1) 30%, rgba(47,40,93,1) 48%, rgba(14,7,60,1) 89%);
- height: 100vh;
- display: flex;
- gap: 1rem;
- flex-direction: column;
- justify-content: center;
- align-items: center;
+  background: #0e073c;
+  background: radial-gradient(circle at center, #231b58 0%, #0e073c 100%);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
 }
+
+/* Header/branding bar */
+.app-header {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+  z-index: 10;
+}
+
+.app-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #ffffff 0%, #ffd700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.offline-badge {
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  color: #ffd700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.offline-badge.visible {
+  opacity: 1;
+}
+
+.offline-badge::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: #ffd700;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #ffd700;
+}
+
 .swiper {
-  width: 95%;
+  width: 100%;
+  max-width: 1200px;
+  aspect-ratio: 3/2;
   overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .swiper-slide {
   display: flex;
   width: 100%;
+  height: 100%;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
-  font-weight: bold;
-  color: #fff;
+  background-color: #0b0530;
 
-  img{
+  img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
   }
 }
 
+/* Install Trigger Toolbar */
+.toolbar {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  z-index: 10;
+}
 
-button{
-  padding: 1rem 2rem;
-  font-size: 14px;
-  font-weight: 700;
-  background:gold;
+.btn-primary {
+  padding: 0.8rem 1.8rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #ffd700 0%, #ff8800 100%);
+  color: #0e073c;
   border: none;
   outline: none;
-  transition: all 500ms ease;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(255, 215, 0, 0.25);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 
-  &:hover{
-    cursor: pointer;
-    background: rgb(33, 16, 82);
-    color: #fff;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(255, 215, 0, 0.4);
+    background: linear-gradient(135deg, #ffe033 0%, #ff9d00 100%);
   }
 
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2);
+  }
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
-@media(width > 1200px){
-  .swiper{
-    width: 1200px;
-    height: 800px;
+/* Glassmorphic PWA Install Drawer */
+.pwa-install-drawer {
+  position: fixed;
+  bottom: -100%;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  background: rgba(14, 7, 60, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px 24px 0 0;
+  color: #ffffff;
+  padding: 2rem;
+  box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.6);
+  transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  justify-content: center;
+}
+
+.pwa-install-drawer.show {
+  bottom: 0;
+}
+
+.pwa-content {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pwa-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pwa-app-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.pwa-title-wrap h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.pwa-title-wrap p {
+  font-size: 0.85rem;
+  color: #b0aeff;
+}
+
+.pwa-description {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Actions for Standard / Android PWA Flow */
+.pwa-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.btn-secondary {
+  flex: 1;
+  padding: 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
   }
 }
-@media(width < 600px){
+
+.btn-drawer-install {
+  flex: 1.5;
+  padding: 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #ffd700 0%, #ff8800 100%);
+  color: #0e073c;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.15);
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+  }
+}
+
+/* Instructions and UI Elements for iOS Safari PWA Flow */
+.pwa-ios-instructions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1.25rem;
+  border-radius: 16px;
+}
+
+.ios-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.step-num {
+  background: #ffd700;
+  color: #0e073c;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.step-text {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* iOS Specific SVG Icons integration style */
+.ios-icon-svg {
+  display: inline-flex;
+  align-self: center;
+  vertical-align: middle;
+  height: 20px;
+  width: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 3px;
+  border-radius: 4px;
+  margin: 0 2px;
+  fill: #ffd700;
+  stroke: #ffd700;
+}
+
+.ios-icon-svg.share-blue {
+  fill: #2f80ed;
+  stroke: #2f80ed;
+  background: transparent;
+  padding: 0;
+}
+
+.btn-ios-close {
+  width: 100%;
+  padding: 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* iOS Bottom Bouncing Visual Indicator */
+.ios-bouncing-indicator {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.ios-indicator-glow {
+  background: rgba(255, 215, 0, 0.8);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  animation: pulse-glow 1.5s infinite;
+}
+
+.ios-indicator-arrow {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid rgba(255, 215, 0, 0.9);
+  animation: bounce-arrow 1.5s infinite;
+}
+
+@keyframes pulse-glow {
+  0% {
+    transform: scale(0.9);
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
+  }
+  100% {
+    transform: scale(0.9);
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+  }
+}
+
+@keyframes bounce-arrow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* Media Queries */
+@media(max-width: 1200px){
   .swiper{
     width: 95%;
   }
 }
+
+@media(max-width: 600px){
+  body {
+    padding: 0.75rem;
+    justify-content: flex-start;
+  }
+  
+  .app-header {
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .swiper {
+    aspect-ratio: 2/3; /* Taller display for mobile screens */
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .pwa-install-drawer {
+    padding: 1.5rem;
+  }
+  
+  .pwa-app-icon {
+    width: 52px;
+    height: 52px;
+  }
+  
+  .toolbar {
+    margin-top: 1rem;
+    width: 100%;
+  }
+  
+  .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Handle safe-areas in modern phones (notch support) */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pwa-install-drawer {
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  }
+  
+  .ios-bouncing-indicator {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+}

@@ -3,28 +3,32 @@
   <head>
     <meta charset="utf-8" />
     <title>EDFI Magazine</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
     <link rel="shortcut icon" href="./icons/icon-192.png" type="image/x-icon">
-   <!-- Required for PWA -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Required for PWA -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#0e073c">
 
     <!-- iOS specific -->
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="./icons/icon-192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="EDFI Magazine">
 
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="./style.css" />
     <link rel="stylesheet" href="./swiper.min.css" />
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/> -->
   </head>
 
   <body>
-    <!-- Swiper -->
+    <!-- Premium App Header -->
+    <header class="app-header">
+      <div class="app-logo">EDFI MAGAZINE</div>
+      <div id="offlineBadge" class="offline-badge">Offline Mode</div>
+    </header>
 
+    <!-- Swiper -->
     <div class="swiper mySwiper landscape">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
@@ -198,12 +202,62 @@
       </div>
     </div>
 
-    <button id="installBtn" class="hidden">Install App</button>
+    <!-- Toolbar for manually triggering Install -->
+    <div class="toolbar">
+      <button id="installBtn" class="btn-primary hidden">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Install App
+      </button>
+    </div>
+
+    <!-- Glassmorphic PWA Install Drawer -->
+    <div id="pwa-install-drawer" class="pwa-install-drawer">
+      <div class="pwa-content">
+        <div class="pwa-header">
+          <img src="./icons/icon-192.png" alt="EDFI Magazine Icon" class="pwa-app-icon" />
+          <div class="pwa-title-wrap">
+            <h3>EDFI Magazine</h3>
+            <p>Eastern Distilleries</p>
+          </div>
+        </div>
+        
+        <p class="pwa-description">
+          Install the EDFI Magazine app on your home screen for instant full-screen flipping, offline browsing, and faster load times.
+        </p>
+        
+        <!-- Android/Chrome Install Prompt UI -->
+        <div id="pwa-android-section" class="pwa-actions hidden">
+          <button id="drawerCancelBtn" class="btn-secondary">Not Now</button>
+          <button id="drawerInstallBtn" class="btn-drawer-install">Install Now</button>
+        </div>
+        
+        <!-- iOS Safari Guidance UI -->
+        <div id="pwa-ios-section" class="pwa-ios-instructions hidden">
+          <div class="ios-step">
+            <div class="step-num">1</div>
+            <div class="step-text">
+              Tap the Share button 
+              <svg class="ios-icon-svg share-blue" viewBox="0 0 24 24"><path d="M12 2L16 6H13V14H11V6H8L12 2Z M5 10V19C5 20.1 5.9 21 7 21H17C18.1 21 19 20.1 19 19V10C19 8.9 18.1 8 17 8H14V10H17V19H7V10H10V8H7C5.9 8 5 8.9 5 10Z"/></svg>
+              in Safari's bottom action bar.
+            </div>
+          </div>
+          <div class="ios-step">
+            <div class="step-num">2</div>
+            <div class="step-text">
+              Scroll down and select <strong>Add to Home Screen</strong>
+              <svg class="ios-icon-svg" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#ffffff" stroke-width="2"/><line x1="12" y1="7" x2="12" y2="17" stroke="#ffffff" stroke-width="2"/><line x1="7" y1="12" x2="17" y2="12" stroke="#ffffff" stroke-width="2"/></svg>.
+            </div>
+          </div>
+          <button id="iosCloseBtn" class="btn-ios-close">Got It</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Swiper JS -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> -->
-
     <script src="./swiper.min.js"></script>
+
+    <!-- App PWA Controller JS -->
+    <script src="./script.js"></script>
 
     <!-- Initialize Swiper -->
     <script>
@@ -220,7 +274,6 @@
           },
         },
       });
-
     </script>
   </body>
 </html>

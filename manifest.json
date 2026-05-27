@@ -1,20 +1,38 @@
 {
-  "name": "Slider App",
-  "short_name": "Slider",
-  "start_url": "/flip/index.html",
+  "name": "EDFI Magazine",
+  "short_name": "EDFI",
+  "description": "Flip through the premium EDFI Magazine seamlessly, online or offline.",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "orientation": "any",
+  "background_color": "#0e073c",
+  "theme_color": "#0e073c",
+  "categories": ["lifestyle", "shopping"],
   "icons": [
     {
-      "src": "/flip/icons/icon-192.png",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/flip/icons/icon-512.png",
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
