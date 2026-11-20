@@ -1,4 +1,4 @@
-const cacheName = 'edfi-magazine-v2';
+const cacheName = 'edfi-magazine-v3';
 
 const filesToCache = [
   './',
@@ -27,10 +27,8 @@ const filesToCache = [
   './img/15.jpg',
   './img/16.jpg',
   './img/17.jpg',
-  './img/18.jpg',
   './img/19.jpg',
   './img/20.jpg',
-  './img/21.jpg',
   './img/22.jpg',
   './img/23.jpg',
   './img/24.jpg',
@@ -43,7 +41,15 @@ const filesToCache = [
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(cacheName)
-      .then(cache => cache.addAll(filesToCache))
+      .then(cache => {
+        return Promise.allSettled(
+          filesToCache.map(file => {
+            return cache.add(file).catch(err => {
+              console.warn('[EDFI PWA] Failed to cache file:', file, err);
+            });
+          })
+        );
+      })
       .then(() => self.skipWaiting())
   );
 });

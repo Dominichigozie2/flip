@@ -2,18 +2,26 @@
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js')
-      .then(reg => console.log('[EDFI PWA] Service Worker registered!', reg))
+      .then(reg => {
+        console.log('[EDFI PWA] Service Worker registered!', reg);
+        // Prompt service worker update if waiting
+        if (reg.waiting) {
+          reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+        }
+      })
       .catch(err => console.error('[EDFI PWA] Service Worker failed:', err));
   });
 }
 
 // 2. Global State & DOM elements
-let deferredPrompt;
+let deferredPrompt = null;
 const installDrawer = document.getElementById('pwa-install-drawer');
 const installBtn = document.getElementById('installBtn'); // floating toolbar button
 const drawerInstallBtn = document.getElementById('drawerInstallBtn'); // drawer action button
 const drawerCancelBtn = document.getElementById('drawerCancelBtn'); // drawer cancel button
 const androidSection = document.getElementById('pwa-android-section');
+const androidManualSection = document.getElementById('pwa-android-manual-section');
+const androidManualCloseBtn = document.getElementById('androidManualCloseBtn');
 const iosSection = document.getElementById('pwa-ios-section');
 const iosCloseBtn = document.getElementById('iosCloseBtn');
 const offlineBadge = document.getElementById('offlineBadge');
@@ -34,16 +42,22 @@ updateConnectionStatus(); // initial check
 
 // 4. Platform Detection Helpers
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const isAndroid = /Android/i.test(navigator.userAgent);
+const isInAppBrowser = /FBAN|FBAV|Instagram|WhatsApp|Twitter|Line|Snapchat|MicroMessenger/i.test(navigator.userAgent);
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 
-// 5. Native Installer Logic (Android, Chrome, Edge)
+// 5. Always make Install Button available if not already installed
+if (!isStandalone && installBtn) {
+  installBtn.classList.remove('hidden');
+}
+
+// 6. Native Installer Logic (Android, Chrome, Edge)
 window.addEventListener('beforeinstallprompt', (e) => {
-  // Prevent standard browser dialogue
+  // Prevent standard browser mini-infobar
   e.preventDefault();
-  // Stash the event
+  // Stash the event so it can be triggered later
   deferredPrompt = e;
   
-  // Show standard buttons & toolbar if not in standalone
   if (!isStandalone && installBtn) {
     installBtn.classList.remove('hidden');
     
@@ -57,10 +71,23 @@ window.addEventListener('beforeinstallprompt', (e) => {
   }
 });
 
+function hideAllSections() {
+  if (androidSection) androidSection.classList.add('hidden');
+  if (androidManualSection) androidManualSection.classList.add('hidden');
+  if (iosSection) iosSection.classList.add('hidden');
+}
+
 function showAndroidPrompt() {
-  if (!deferredPrompt || !installDrawer || !androidSection || !iosSection) return;
-  androidSection.classList.remove('hidden');
-  iosSection.classList.add('hidden');
+  if (!installDrawer) return;
+  hideAllSections();
+  if (androidSection) androidSection.classList.remove('hidden');
+  installDrawer.classList.add('show');
+}
+
+function showAndroidManualPrompt() {
+  if (!installDrawer) return;
+  hideAllSections();
+  if (androidManualSection) androidManualSection.classList.remove('hidden');
   installDrawer.classList.add('show');
 }
 
@@ -68,19 +95,24 @@ function showAndroidPrompt() {
 if (installBtn) {
   installBtn.addEventListener('click', () => {
     if (deferredPrompt) {
+      // 1-Click native install on supported Android/Chrome
       showAndroidPrompt();
     } else if (isIOS && !isStandalone) {
+      // Step-by-step iOS Safari visual guide
       showIosPrompt();
     } else {
-      // General instructions fallback
-      alert("To install, use your browser's menu option 'Add to Home screen' or 'Install'.");
+      // Android in-app browser, non-Chrome, or fallback guide
+      showAndroidManualPrompt();
     }
   });
 }
 
 if (drawerInstallBtn) {
   drawerInstallBtn.addEventListener('click', () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      showAndroidManualPrompt();
+      return;
+    }
     
     deferredPrompt.prompt();
     
@@ -104,6 +136,13 @@ if (drawerCancelBtn) {
   });
 }
 
+if (androidManualCloseBtn) {
+  androidManualCloseBtn.addEventListener('click', () => {
+    hideInstallDrawer();
+    localStorage.setItem('pwa-android-dismissed', 'true');
+  });
+}
+
 function hideInstallDrawer() {
   if (installDrawer) installDrawer.classList.remove('show');
   
@@ -113,10 +152,10 @@ function hideInstallDrawer() {
   }
 }
 
-// 6. iOS Installation Guidance Flow
+// 7. iOS Installation Guidance Flow
 function showIosPrompt() {
-  if (!installDrawer || !androidSection || !iosSection) return;
-  androidSection.classList.add('hidden');
+  if (!installDrawer || !iosSection) return;
+  hideAllSections();
   iosSection.classList.remove('hidden');
   installDrawer.classList.add('show');
   
@@ -137,7 +176,6 @@ function showIosPrompt() {
 if (isIOS && !isStandalone) {
   if (installBtn) {
     installBtn.innerText = "Install Magazine";
-    installBtn.classList.remove('hidden');
   }
   
   const dismissed = localStorage.getItem('pwa-ios-dismissed');
@@ -155,7 +193,7 @@ if (iosCloseBtn) {
   });
 }
 
-// 7. Success Tracking
+// 8. Success Tracking
 window.addEventListener('appinstalled', (evt) => {
   console.log('[EDFI PWA] App installed successfully!');
   if (installBtn) installBtn.classList.add('hidden');

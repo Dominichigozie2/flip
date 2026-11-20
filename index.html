@@ -217,14 +217,6 @@
         </div>
         <div class="swiper-slide">
           <a
-            href="https://easterndistilleries.com/premiumdisplay.php?id=6"
-            title="Link to image"
-          >
-            <img src="./img/18.jpg" alt="" />
-          </a>
-        </div>
-        <div class="swiper-slide">
-          <a
             href="https://easterndistilleries.com/premiumdisplay.php?id=8"
             title="Link to image"
           >
@@ -273,10 +265,30 @@
           Install the EDFI Magazine app on your home screen for instant full-screen flipping, offline browsing, and faster load times.
         </p>
         
-        <!-- Android/Chrome Install Prompt UI -->
+        <!-- Android/Chrome Direct Install Prompt UI -->
         <div id="pwa-android-section" class="pwa-actions hidden">
           <button id="drawerCancelBtn" class="btn-secondary">Not Now</button>
           <button id="drawerInstallBtn" class="btn-drawer-install">Install Now</button>
+        </div>
+
+        <!-- Android Manual Guidance UI (For in-app browsers, non-Chrome, or fallback) -->
+        <div id="pwa-android-manual-section" class="pwa-ios-instructions hidden">
+          <div class="ios-step">
+            <div class="step-num">1</div>
+            <div class="step-text">
+              Tap the <strong>Menu (&vellip; or 3 lines)</strong> in your browser bar.
+            </div>
+          </div>
+          <div class="ios-step">
+            <div class="step-num">2</div>
+            <div class="step-text">
+              Select <strong>Install app</strong> or <strong>Add to Home screen</strong>.
+            </div>
+          </div>
+          <div class="ios-step" id="inAppNotice" style="font-size: 0.85rem; color: #ffd700; opacity: 0.95;">
+            <span>💡 <em>If viewing inside WhatsApp, Instagram, or Facebook, tap (⋮) and choose <strong>"Open in Chrome / Browser"</strong> first.</em></span>
+          </div>
+          <button id="androidManualCloseBtn" class="btn-ios-close">Got It</button>
         </div>
         
         <!-- iOS Safari Guidance UI -->
