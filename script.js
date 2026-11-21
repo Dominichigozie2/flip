@@ -1,13 +1,44 @@
-// 1. Service Worker Registration
+// 1. Service Worker Registration & Immediate Auto-Update
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!refreshing) {
+        refreshing = true;
+        window.location.reload();
+      }
+    });
+
     navigator.serviceWorker.register('./service-worker.js')
       .then(reg => {
         console.log('[EDFI PWA] Service Worker registered!', reg);
-        // Prompt service worker update if waiting
+
+        // Force immediate check on launch
+        reg.update();
+
+        // Also check whenever the user returns to the app from background
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') {
+            reg.update();
+          }
+        });
+
+        // If an updated worker is already waiting, activate immediately
         if (reg.waiting) {
           reg.waiting.postMessage({ type: 'SKIP_WAITING' });
         }
+
+        // When a new update is found, activate as soon as installed
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (newWorker) {
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+              }
+            });
+          }
+        });
       })
       .catch(err => console.error('[EDFI PWA] Service Worker failed:', err));
   });

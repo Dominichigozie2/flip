@@ -1,4 +1,4 @@
-const cacheName = 'edfi-magazine-v4';
+const cacheName = 'edfi-magazine-v5';
 
 const filesToCache = [
   './',
@@ -74,5 +74,11 @@ self.addEventListener('fetch', e => {
       return response || fetch(e.request);
     })
   );
+});
+
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
