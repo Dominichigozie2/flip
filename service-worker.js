@@ -1,4 +1,4 @@
-const cacheName = 'edfi-magazine-v6';
+const cacheName = 'edfi-magazine-v10';
 
 const filesToCache = [
   './',
